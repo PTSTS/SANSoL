@@ -6,7 +6,7 @@ This repository provides the PyTorch implementation of _Structure Aware Negative
 
 ## Execution
 
-For example, the following command trains and validates a TransE model on wn18rr dataset by using RW-SANS with 1000 random walks on 3-Hop:
+For example, the following command trains and validates a TransE model on wn18rr dataset by using RW-SANS with 1000 random walks on 3-Hop neighborhood:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python -u codes/run.py --cuda \
@@ -26,6 +26,11 @@ To check all the available arguments, you can run `python codes/run.py --help`.
 
 To reproduce the results in the EMNLP 2020 paper _Structure Aware Negative Sampling in Knowledge Graphs_, you can use the commands provided in `bash_config.sh`.
 
-## Acknowledgment
+## Infrustrucutre
+
+All experiments were carried on a server with one NVIDIA V100 GPU, 10 CPU cores, and 46GB RAM.
+
+## Acknowledgments
 
 Our implemention is based on the PyTorch implementation of RotatE model provided [here](https://github.com/DeepGraphLearning/KnowledgeGraphEmbedding).
+This research was enabled in part by support provided by [Calcul Québec](https://www.calculquebec.ca/en/) and [Compute Canada](www.computecanada.ca).
