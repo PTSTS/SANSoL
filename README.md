@@ -24,7 +24,7 @@ To check all the available arguments, you can run `python codes/run.py --help`.
 
 ## Reproducibility
 
-To reproduce the results in the EMNLP 2020 paper _Structure Aware Negative Sampling in Knowledge Graphs_, you can use the commands provided in `bash_config.sh`.
+To reproduce the results in the EMNLP 2020 paper _Structure Aware Negative Sampling in Knowledge Graphs_, you can use the commands provided in `best_config.sh`.
 
 ## Infrustrucutre
 
