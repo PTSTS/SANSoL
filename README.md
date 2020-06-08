@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This repository provides the PyTorch implementation of _Structure Aware Negative Sampling (SANS)_ technique as well as several popular KGE models.
+This repository provides the PyTorch implementation of _Structure Aware Negative Sampling (SANS)_ technique presented in _Structure Aware Negative Sampling in Knowledge Graphs_ paper as well as several popular KGE models.
 
 ## Execution
 
-For example, the following command trains and validates a TransE model on wn18rr dataset by using RW-SANS with 1000 random walks on 3-Hop neighborhood:
+As an example, the following command trains and validates a TransE model on wn18rr dataset by using RW-SANS with 1000 random walks on 3-Hop neighborhood:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 python -u codes/run.py --cuda \
@@ -24,7 +24,7 @@ To check all the available arguments, you can run `python codes/run.py --help`.
 
 ## Reproducibility
 
-To reproduce the results in the EMNLP 2020 paper _Structure Aware Negative Sampling in Knowledge Graphs_, you can use the commands provided in `best_config.sh`.
+To reproduce the results presented in the EMNLP 2020 paper _Structure Aware Negative Sampling in Knowledge Graphs_, you can use the commands provided in `best_config.sh`.
 
 ## Infrustrucutre
 
