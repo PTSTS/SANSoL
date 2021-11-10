@@ -206,7 +206,7 @@ def main(args):
     test_triples = read_triple(os.path.join(args.data_path, 'test.txt'), entity2id, relation2id)
     logging.info('#test: %d' % len(test_triples))
 
-    if ns != 'SANS':
+    if ns != 'SANS' or ns != 'uniform':
         lies_triples = read_triple(os.path.join(args.lies, 'train.txt'), entity2id, relation2id)
         logging.info('#lies train: %d' % len(lies_triples))
     # All true triples
