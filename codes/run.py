@@ -31,6 +31,7 @@ def parse_args(args=None):
     parser.add_argument('-de', '--double_entity_embedding', action='store_true')
     parser.add_argument('-dr', '--double_relation_embedding', action='store_true')
 
+    parser.add_argument('-ns', '--negative_sample_method', default='SANS', type=str)
     parser.add_argument('-n', '--negative_sample_size', default=128, type=int)
     parser.add_argument('-d', '--hidden_dim', default=500, type=int)
     parser.add_argument('-g', '--gamma', default=12.0, type=float)
@@ -58,6 +59,8 @@ def parse_args(args=None):
 
     parser.add_argument('--nentity', type=int, default=0, help='DO NOT MANUALLY SET')
     parser.add_argument('--nrelation', type=int, default=0, help='DO NOT MANUALLY SET')
+
+    parser.add_argument('-lies', type=str, help='path to lies data (directory)')
 
     return parser.parse_args(args)
 
@@ -168,6 +171,7 @@ def main(args):
     if args.save_path and not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
 
+    ns = args.negative_sample_method
     # Write logs to checkpoint and console
     set_logger(args)
 
@@ -191,6 +195,7 @@ def main(args):
 
     logging.info('Model: %s' % args.model)
     logging.info('Data Path: %s' % args.data_path)
+    logging.info('NS method: %s' % ns)
     logging.info('#entity: %d' % nentity)
     logging.info('#relation: %d' % nrelation)
 
@@ -201,6 +206,9 @@ def main(args):
     test_triples = read_triple(os.path.join(args.data_path, 'test.txt'), entity2id, relation2id)
     logging.info('#test: %d' % len(test_triples))
 
+    if ns != 'SANS':
+        lies_triples = read_triple(os.path.join(args.lies, 'train.txt'), entity2id, relation2id)
+        logging.info('#lies train: %d' % len(lies_triples))
     # All true triples
     all_true_triples = train_triples + valid_triples + test_triples
 
@@ -231,7 +239,8 @@ def main(args):
                          'head-batch',
                          args.negative_k_hop_sampling,
                          args.negative_n_random_walks,
-                         dsn=args.data_path),
+                         dsn=args.data_path,
+                         method=ns),
             batch_size=args.batch_size,
             shuffle=True,
             num_workers=max(1, args.cpu_num//2),
@@ -246,7 +255,8 @@ def main(args):
                          'tail-batch',
                          args.negative_k_hop_sampling,
                          args.negative_n_random_walks,
-                         dsn=args.data_path),
+                         dsn=args.data_path,
+                         method=ns),
             batch_size=args.batch_size,
             shuffle=True,
             num_workers=max(1, args.cpu_num//2),

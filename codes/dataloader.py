@@ -30,12 +30,41 @@ class TrainDataset(Dataset):
         a_mat = a_mat.tocsr()
         return a_mat
 
+    def _get_lies_adj_mat(self):
+        a_mat = sparse.dok_matrix((self.nentity, self.nentity))
+        for (h, _, t) in self.lies_triples:
+            a_mat[t, h] = 1
+            a_mat[h, t] = 1
+
+        a_mat = a_mat.tocsr()
+        return a_mat
+
     @time_it
     def build_k_hop(self, k_hop, dataset_name):
         if k_hop == 0:
             return None
 
         save_path = f'cached_matrices/matrix_{dataset_name}_k{k_hop}_nrw0.npz'
+
+        if os.path.exists(save_path):
+            logging.info(f'Using cached matrix: {save_path}')
+            k_mat = sparse.load_npz(save_path)
+            return k_mat
+
+        _a_mat = self._get_adj_mat()
+        _k_mat = _a_mat ** (k_hop - 1)
+        k_mat = _k_mat * _a_mat + _k_mat
+
+        sparse.save_npz(save_path, k_mat)
+
+        return k_mat
+
+    @time_it
+    def build_lies_k_hop(self, k_hop, dataset_name):
+        if k_hop == 0:
+            return None
+
+        save_path = f'cached_matrices/matrix_{dataset_name}_lies_k{k_hop}_nrw0.npz'
 
         if os.path.exists(save_path):
             logging.info(f'Using cached matrix: {save_path}')
@@ -92,7 +121,45 @@ class TrainDataset(Dataset):
 
         return k_mat
 
-    def __init__(self, triples, nentity, nrelation, negative_sample_size, mode, k_hop, n_rw, dsn):
+    @time_it
+    def build_lies_k_rw(self, n_rw, k_hop, dataset_name):
+        if n_rw == 0 or k_hop == 0:
+            return None
+
+        save_path = f'cached_matrices/matrix_{dataset_name}_lies_k{k_hop}_nrw{n_rw}.npz'
+
+        if os.path.exists(save_path):
+            logging.info(f'Using cached matrix: {save_path}')
+            k_mat = sparse.load_npz(save_path)
+            return k_mat
+
+        a_mat = self._get_lies_adj_mat()
+        k_mat = sparse.dok_matrix((self.nentity, self.nentity))
+
+        randomly_sampled = 0
+
+        for i in range(0, self.nentity):
+            neighbors = a_mat[i]
+            if len(neighbors.indices) == 0:
+                randomly_sampled += 1
+                walker = np.random.randint(self.nentity, size=n_rw)
+                k_mat[i, walker] = 1
+            else:
+                for _ in range(0, n_rw):
+                    walker = i
+                    for _ in range(0, k_hop):
+                        idx = np.random.randint(len(neighbors.indices))
+                        walker = neighbors.indices[idx]
+                        neighbors = a_mat[walker]
+                    k_mat[i, walker] += 1
+        logging.info(f'randomly_sampled: {randomly_sampled}')
+        k_mat = k_mat.tocsr()
+
+        sparse.save_npz(save_path, k_mat)
+        return k_mat
+
+    def __init__(self, triples, nentity, nrelation, negative_sample_size, mode, k_hop, n_rw, dsn,
+                 method='SANS', lies_triples=None):
         self.len = len(triples)
         self.triples = triples
         self.triple_set = set(triples)
@@ -103,11 +170,23 @@ class TrainDataset(Dataset):
         self.count = self.count_frequency(triples)
         self.true_head, self.true_tail = self.get_true_head_and_tail(self.triples)
         self.dsn = dsn.split('/')[1]  # dataset name
+        self.method = method
+        if lies_triples is not None:
+            self.lies_triples = lies_triples
+            self.lies_triples_set = set(lies_triples)
 
         if n_rw == 0:
             self.k_neighbors = self.build_k_hop(k_hop, dataset_name=self.dsn)
+            if self.method != 'SANS':
+                self.lies_k_neighbors = self.build_lies_k_hop(k_hop, dataset_name=self.dsn)
+            else:
+                self.lies_k_neighbors = None
         else:
             self.k_neighbors = self.build_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
+            if self.method != 'SANS':
+                self.lies_k_neighbors = self.build_lies_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
+            else:
+                self.lies_k_neighbors = None
 
     def __len__(self):
         return self.len
@@ -126,10 +205,16 @@ class TrainDataset(Dataset):
         k_hop_flag = True
         while negative_sample_size < self.negative_sample_size:
             if self.k_neighbors is not None and k_hop_flag:
-                if self.mode == 'head-batch':
-                    khop = self.k_neighbors[tail].indices
-                elif self.mode == 'tail-batch':
-                    khop = self.k_neighbors[head].indices
+                if self.method == 'SANS':
+                    if self.mode == 'head-batch':
+                        khop = self.k_neighbors[tail].indices
+                    elif self.mode == 'tail-batch':
+                        khop = self.k_neighbors[head].indices
+                elif self.method == 'SANSOL':
+                    if self.mode == 'head-batch':
+                        khop = self.lies_k_neighbors[tail].indices
+                    elif self.mode == 'tail-batch':
+                        khop = self.lies_k_neighbors[head].indices
                 else:
                     raise ValueError('Training batch mode %s not supported' % self.mode)
                 negative_sample = khop[np.random.randint(len(khop), size=self.negative_sample_size * 2)].astype(
