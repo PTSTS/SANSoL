@@ -187,6 +187,7 @@ class TrainDataset(Dataset):
                     self.lies_k_neighbors = self.build_lies_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
                 else:
                     self.lies_k_neighbors = None
+        print(self.method)
 
     def __len__(self):
         return self.len
