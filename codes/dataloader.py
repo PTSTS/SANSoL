@@ -204,7 +204,9 @@ class TrainDataset(Dataset):
 
         k_hop_flag = True
         while negative_sample_size < self.negative_sample_size:
-            if self.k_neighbors is not None and k_hop_flag:
+            if self.method == 'uniform':
+                negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
+            elif self.k_neighbors is not None and k_hop_flag:
                 if self.method == 'SANS':
                     if self.mode == 'head-batch':
                         khop = self.k_neighbors[tail].indices
