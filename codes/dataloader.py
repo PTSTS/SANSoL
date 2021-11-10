@@ -174,19 +174,19 @@ class TrainDataset(Dataset):
         if lies_triples is not None:
             self.lies_triples = lies_triples
             self.lies_triples_set = set(lies_triples)
-
-        if n_rw == 0:
-            self.k_neighbors = self.build_k_hop(k_hop, dataset_name=self.dsn)
-            if self.method != 'SANS':
-                self.lies_k_neighbors = self.build_lies_k_hop(k_hop, dataset_name=self.dsn)
+        if method != 'uniform':
+            if n_rw == 0:
+                self.k_neighbors = self.build_k_hop(k_hop, dataset_name=self.dsn)
+                if self.method != 'SANS':
+                    self.lies_k_neighbors = self.build_lies_k_hop(k_hop, dataset_name=self.dsn)
+                else:
+                    self.lies_k_neighbors = None
             else:
-                self.lies_k_neighbors = None
-        else:
-            self.k_neighbors = self.build_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
-            if self.method != 'SANS':
-                self.lies_k_neighbors = self.build_lies_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
-            else:
-                self.lies_k_neighbors = None
+                self.k_neighbors = self.build_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
+                if self.method != 'SANS':
+                    self.lies_k_neighbors = self.build_lies_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
+                else:
+                    self.lies_k_neighbors = None
 
     def __len__(self):
         return self.len
