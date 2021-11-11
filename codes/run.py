@@ -60,8 +60,8 @@ def parse_args(args=None):
     parser.add_argument('--nentity', type=int, default=0, help='DO NOT MANUALLY SET')
     parser.add_argument('--nrelation', type=int, default=0, help='DO NOT MANUALLY SET')
 
-    parser.add_argument('-lies', type=str, help='path to lies data (directory)')
-    parser.add_argument('-results', type=str, default='')
+    parser.add_argument('--lies', type=str, help='path to lies data (directory)')
+    parser.add_argument('--results', type=str, default='')
 
     return parser.parse_args(args)
 
@@ -392,4 +392,6 @@ def main(args):
 
 
 if __name__ == '__main__':
-    main(parse_args())
+    args = parse_args()
+    for metric in main(args):
+        pass
