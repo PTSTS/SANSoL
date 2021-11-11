@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import random
+import pickle
 
 import numpy as np
 import torch
@@ -62,6 +63,7 @@ def parse_args(args=None):
 
     parser.add_argument('--lies', type=str, help='path to lies data (directory)')
     parser.add_argument('--results', type=str, default='')
+    parser.add_argument('-save_results', type=int, default=1)
 
     return parser.parse_args(args)
 
@@ -113,6 +115,25 @@ def save_model(model, optimizer, save_variable_list, args):
     )
 
 
+def save_results(method, rpns, id, metric, value, steps, base_path=f'/var/scratch/yan370/SANSOL/'):
+    file_name = f'results_{steps}.pkl'
+    try:
+        results = pickle.load(open(base_path + file_name, 'rb', ))
+    except FileNotFoundError:
+        results = {}
+    assert type(results) is dict
+    if method not in results.keys():
+        results[method] = {}
+    if rpns not in results[method].keys():
+        results[method][rpns] = {}
+    if id not in results[method][rpns].keys():
+        results[method][rpns][id] = {}
+    if metric not in results[method][rpns][id].keys():
+        results[method][rpns][id][metric] = {}
+    results[method][rpns][id][metric] = value
+    pickle.dump(results, open(base_path + file_name, 'wb+'))
+
+
 def read_triple(file_path, entity2id, relation2id):
     '''
     Read triples and map them into ids.
@@ -159,7 +180,7 @@ def log_metrics(mode, step, metrics, save_path=None):
         with open(save_path, 'a+', encoding='utf-8') as f:
             metric_keys = ['MRR', 'HITS@1', 'HITS@3', 'HITS@10']
             for key in metric_keys:
-                f.write(f'{metrics[key]}')
+                f.write(f'{metrics[key]}\n')
 
 
 def main(args):
@@ -368,6 +389,13 @@ def main(args):
         else:
             log_metrics('Valid', step, valid_metrics)
 
+        if args.save_results == 1:
+            for metric_key, value in valid_metrics.item():
+
+                rpns_rate = args.lies.split('/')[1].split('_')[-2]
+                rpns_id = args.lies.split('/')[1].split('_')[-1]
+                save_results(args.ns, rpns_rate, rpns_id, metric_key, value, args.max_steps)
+
         yield valid_metrics
 
     if args.do_test:
@@ -389,6 +417,7 @@ def main(args):
             log_metrics('Train', step, train_metrics)
 
         yield train_metrics
+
 
 
 if __name__ == '__main__':

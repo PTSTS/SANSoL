@@ -1,13 +1,15 @@
 
 import subprocess
+import pickle
 
 
 def run_command(lies_path, k_hop, ):
     command = f"""python -u codes/run.py --cuda --do_train --do_valid --data_path data/converted --model TransE -n 
 256 -b 1024 -d 1000 -g 24.0 -a 1.0 -lr 0.05 --max_steps 2656 -save models/{lies_path.split('/')[-1]} --test_batch_size 
     16 -khop 
-{k_hop} --log_steps 100000 -ns SANSOL -lies {lies_path}"""
+{k_hop} --log_steps 100000 -ns SANSOL -lies {lies_path} --save_results 1"""
     cmd = subprocess.run(command, shell=True)
+
 
 
 def main():
@@ -21,7 +23,7 @@ def main():
                 try:
                     run_command(f'{base_path}/mat_false_{rate}_{i}', k)
                     with open(results_path, 'a', encoding='utf-8') as f:
-                        f.write(f'Above results are from rules {rate}-{i}, k={k}')
+                        f.write(f'Above results are from rules {rate}-{i}, k={k}\n')
                 except:
                     pass
 
