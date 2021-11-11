@@ -61,6 +61,7 @@ def parse_args(args=None):
     parser.add_argument('--nrelation', type=int, default=0, help='DO NOT MANUALLY SET')
 
     parser.add_argument('-lies', type=str, help='path to lies data (directory)')
+    parser.add_argument('-results', type=str, default='')
 
     return parser.parse_args(args)
 
@@ -148,12 +149,17 @@ def set_logger(args):
     logging.getLogger('').addHandler(console)
 
 
-def log_metrics(mode, step, metrics):
+def log_metrics(mode, step, metrics, save_path=None):
     '''
     Print the evaluation logs
     '''
     for metric in metrics:
         logging.info('%s %s at step %d: %f' % (mode, metric, step, metrics[metric]))
+    if save_path is not None:
+        with open(save_path, 'a+', encoding='utf-8') as f:
+            metric_keys = ['MRR', 'HITS@1', 'HITS@3', 'HITS@10']
+            for key in metric_keys:
+                f.write(f'{metrics[key]}')
 
 
 def main(args):
@@ -356,18 +362,33 @@ def main(args):
 
     if args.do_valid:
         logging.info('Evaluating on Valid Dataset...')
-        metrics = kge_model.test_step(kge_model, valid_triples, all_true_triples, args)
-        log_metrics('Valid', step, metrics)
+        valid_metrics = kge_model.test_step(kge_model, valid_triples, all_true_triples, args)
+        if args.results:
+            log_metrics('Valid', step, valid_metrics, save_path=args.ressults)
+        else:
+            log_metrics('Valid', step, valid_metrics)
+
+        yield valid_metrics
 
     if args.do_test:
         logging.info('Evaluating on Test Dataset...')
-        metrics = kge_model.test_step(kge_model, test_triples, all_true_triples, args)
-        log_metrics('Test', step, metrics)
+        test_metrics = kge_model.test_step(kge_model, test_triples, all_true_triples, args)
+        if args.results:
+            log_metrics('Test', step, test_metrics, save_path=args.results)
+        else:
+            log_metrics('Test', step, test_metrics)
+
+        yield test_metrics
 
     if args.evaluate_train:
         logging.info('Evaluating on Training Dataset...')
-        metrics = kge_model.test_step(kge_model, train_triples, all_true_triples, args)
-        log_metrics('Test', step, metrics)
+        train_metrics = kge_model.test_step(kge_model, train_triples, all_true_triples, args)
+        if args.results:
+            log_metrics('Train', step, train_metrics, save_path=args.results)
+        else:
+            log_metrics('Train', step, train_metrics)
+
+        yield train_metrics
 
 
 if __name__ == '__main__':
