@@ -208,34 +208,35 @@ class TrainDataset(Dataset):
         while negative_sample_size < self.negative_sample_size:
             if self.method == 'uniform':
                 negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
-            elif self.k_neighbors is not None and k_hop_flag:
-                if self.method == 'SANS':
-                    if self.mode == 'head-batch':
-                        khop = self.k_neighbors[tail].indices
-                    elif self.mode == 'tail-batch':
-                        khop = self.k_neighbors[head].indices
-                elif self.method == 'SANSOL':
-                    if self.mode == 'head-batch':
-                        khop = self.lies_k_neighbors[tail].indices
-                    elif self.mode == 'tail-batch':
-                        khop = self.lies_k_neighbors[head].indices
-                elif self.method == 'SANSOLF':
-                    if lies_k_hop_flag:
-                        if self.mode == 'head-batch':
-                            khop = self.lies_k_neighbors[tail].indices
-                        elif self.mode == 'tail-batch':
-                            khop = self.lies_k_neighbors[head].indices
-                    else:
+            else:
+                if self.k_neighbors is not None and k_hop_flag:
+                    if self.method == 'SANS':
                         if self.mode == 'head-batch':
                             khop = self.k_neighbors[tail].indices
                         elif self.mode == 'tail-batch':
                             khop = self.k_neighbors[head].indices
+                    elif self.method == 'SANSOL':
+                        if self.mode == 'head-batch':
+                            khop = self.lies_k_neighbors[tail].indices
+                        elif self.mode == 'tail-batch':
+                            khop = self.lies_k_neighbors[head].indices
+                    elif self.method == 'SANSOLF':
+                        if lies_k_hop_flag:
+                            if self.mode == 'head-batch':
+                                khop = self.lies_k_neighbors[tail].indices
+                            elif self.mode == 'tail-batch':
+                                khop = self.lies_k_neighbors[head].indices
+                        else:
+                            if self.mode == 'head-batch':
+                                khop = self.k_neighbors[tail].indices
+                            elif self.mode == 'tail-batch':
+                                khop = self.k_neighbors[head].indices
+                    else:
+                        raise ValueError('Training batch mode %s not supported' % self.mode)
+                    negative_sample = khop[np.random.randint(len(khop), size=self.negative_sample_size * 2)].astype(
+                        np.int64)
                 else:
-                    raise ValueError('Training batch mode %s not supported' % self.mode)
-                negative_sample = khop[np.random.randint(len(khop), size=self.negative_sample_size * 2)].astype(
-                    np.int64)
-            else:
-                negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
+                    negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
             if self.mode == 'head-batch':
                 mask = np.in1d(
                     negative_sample,
