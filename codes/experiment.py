@@ -20,6 +20,8 @@ def main():
     for rate in rpns_rates:
         for i in range(20):
             if exists(f'{base_path}/mat_false_{rate}_{i}/train.txt'):
+                print(f'{rate} {i} '
+                      f'______________________________________________________________________________________')
                 for k in range(2, 8):
                         try:
                             run_command(f'{base_path}/mat_false_{rate}_{i}', k, ns)
