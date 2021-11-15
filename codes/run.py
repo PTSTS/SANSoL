@@ -390,7 +390,7 @@ def main(args):
             log_metrics('Valid', step, valid_metrics)
 
         if args.save_results == 1:
-            for metric_key, value in valid_metrics.item():
+            for metric_key, value in valid_metrics.items():
 
                 rpns_rate = args.lies.split('/')[1].split('_')[-2]
                 rpns_id = args.lies.split('/')[1].split('_')[-1]
