@@ -13,3 +13,4 @@ logs
 models
 
 !**/PLACEHOLDER
+*.npz
