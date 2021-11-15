@@ -25,7 +25,7 @@ def obj_sansol(trial: optuna.trial.Trial):
         f"""--results /var/scratch/yan370/SANSOL/results.txt """\
         f"""--temp_results {temp_results_path}"""
     cmd = subprocess.Popen(command, shell=True)
-    cmd.communicate()
+    out, err = cmd.communicate()
     results = pickle.load(open(temp_results_path, 'rb'))
     os.remove(temp_results_path)
     return results['MRR']
