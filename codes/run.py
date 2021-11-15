@@ -292,6 +292,7 @@ def main(args):
                 collate_fn=TrainDataset.collate_fn
             )
         else:
+            print(args.data_path + args.lies.split('/')[-1])
             train_dataloader_head = DataLoader(
                 TrainDataset(train_triples,
                              nentity,
