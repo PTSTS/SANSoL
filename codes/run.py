@@ -258,8 +258,7 @@ def main(args):
 
     if args.do_train:
         # Set training dataloader iterator
-        print(ns)
-        if ns not in ['SANS', 'uniform']:
+        if ns in ['SANS', 'uniform']:
             train_dataloader_head = DataLoader(
                 TrainDataset(train_triples,
                              nentity,
