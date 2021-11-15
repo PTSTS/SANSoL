@@ -422,7 +422,7 @@ def main(args):
         logging.info('Evaluating on Valid Dataset...')
         valid_metrics = kge_model.test_step(kge_model, valid_triples, all_true_triples, args)
         if args.results:
-            log_metrics('Valid', step, valid_metrics, save_path=args.ressults)
+            log_metrics('Valid', step, valid_metrics, save_path=args.results)
         else:
             log_metrics('Valid', step, valid_metrics)
 
