@@ -64,6 +64,7 @@ def parse_args(args=None):
     parser.add_argument('--lies', type=str, help='path to lies data (directory)')
     parser.add_argument('--results', type=str, default='')
     parser.add_argument('-save_results', type=int, default=1)
+    parser.add_argument('--temp_results', type=str, default='')
 
     return parser.parse_args(args)
 
@@ -431,7 +432,10 @@ def main(args):
 
                 rpns_rate = args.lies.split('/')[-1].split('_')[-2]
                 rpns_id = args.lies.split('/')[-1].split('_')[-1]
-                save_results(args.ns, rpns_rate, rpns_id, metric_key, value, args.max_steps)
+                save_results(args.negative_sample_method, rpns_rate, rpns_id, metric_key, value, args.max_steps)
+
+        if args.temp_results:
+            pickle.dump(valid_metrics, open(args.temp_results, 'wb+'))
 
         yield valid_metrics
 
