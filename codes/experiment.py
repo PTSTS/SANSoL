@@ -19,7 +19,7 @@ def main():
     results_path = '/var/scratch/yan370/SANSOL/results.txt'
     for rate in rpns_rates:
         for i in range(20):
-            if exists(f'{base_path}/mat_false_{rate}_{i}'):
+            if exists(f'{base_path}/mat_false_{rate}_{i}/train.txt'):
                 for k in range(2, 8):
                         try:
                             run_command(f'{base_path}/mat_false_{rate}_{i}', k, ns)
