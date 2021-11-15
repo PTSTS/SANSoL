@@ -159,7 +159,7 @@ class TrainDataset(Dataset):
         return k_mat
 
     def __init__(self, triples, nentity, nrelation, negative_sample_size, mode, k_hop, n_rw, dsn,
-                 method='SANS', lies_triples=None):
+                 method, lies_triples=None):
         self.len = len(triples)
         self.triples = triples
         self.triple_set = set(triples)
