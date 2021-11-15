@@ -258,37 +258,74 @@ def main(args):
 
     if args.do_train:
         # Set training dataloader iterator
-        train_dataloader_head = DataLoader(
-            TrainDataset(train_triples,
-                         nentity,
-                         nrelation,
-                         args.negative_sample_size,
-                         'head-batch',
-                         args.negative_k_hop_sampling,
-                         args.negative_n_random_walks,
-                         dsn=args.data_path,
-                         method=ns),
-            batch_size=args.batch_size,
-            shuffle=True,
-            num_workers=max(1, args.cpu_num//2),
-            collate_fn=TrainDataset.collate_fn
-        )
 
-        train_dataloader_tail = DataLoader(
-            TrainDataset(train_triples,
-                         nentity,
-                         nrelation,
-                         args.negative_sample_size,
-                         'tail-batch',
-                         args.negative_k_hop_sampling,
-                         args.negative_n_random_walks,
-                         dsn=args.data_path,
-                         method=ns),
-            batch_size=args.batch_size,
-            shuffle=True,
-            num_workers=max(1, args.cpu_num//2),
-            collate_fn=TrainDataset.collate_fn
-        )
+        if ns != 'SANS' and ns != 'uniform':
+            train_dataloader_head = DataLoader(
+                TrainDataset(train_triples,
+                             nentity,
+                             nrelation,
+                             args.negative_sample_size,
+                             'head-batch',
+                             args.negative_k_hop_sampling,
+                             args.negative_n_random_walks,
+                             dsn=args.data_path,
+                             method=ns),
+                batch_size=args.batch_size,
+                shuffle=True,
+                num_workers=max(1, args.cpu_num//2),
+                collate_fn=TrainDataset.collate_fn
+            )
+
+            train_dataloader_tail = DataLoader(
+                TrainDataset(train_triples,
+                             nentity,
+                             nrelation,
+                             args.negative_sample_size,
+                             'tail-batch',
+                             args.negative_k_hop_sampling,
+                             args.negative_n_random_walks,
+                             dsn=args.data_path,
+                             method=ns),
+                batch_size=args.batch_size,
+                shuffle=True,
+                num_workers=max(1, args.cpu_num//2),
+                collate_fn=TrainDataset.collate_fn
+            )
+        else:
+            train_dataloader_head = DataLoader(
+                TrainDataset(train_triples,
+                             nentity,
+                             nrelation,
+                             args.negative_sample_size,
+                             'head-batch',
+                             args.negative_k_hop_sampling,
+                             args.negative_n_random_walks,
+                             dsn=args.data_path,
+                             method=ns,
+                             lies_triples=lies_triples),
+                batch_size=args.batch_size,
+                shuffle=True,
+                num_workers=max(1, args.cpu_num//2),
+                collate_fn=TrainDataset.collate_fn
+            )
+
+            train_dataloader_tail = DataLoader(
+                TrainDataset(train_triples,
+                             nentity,
+                             nrelation,
+                             args.negative_sample_size,
+                             'tail-batch',
+                             args.negative_k_hop_sampling,
+                             args.negative_n_random_walks,
+                             dsn=args.data_path,
+                             method=ns,
+                             lies_triples=lies_triples),
+                batch_size=args.batch_size,
+                shuffle=True,
+                num_workers=max(1, args.cpu_num//2),
+                collate_fn=TrainDataset.collate_fn
+            )
+
 
         train_iterator = BidirectionalOneShotIterator(train_dataloader_head, train_dataloader_tail)
 
