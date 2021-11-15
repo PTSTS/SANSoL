@@ -2,6 +2,7 @@
 import subprocess
 import pickle
 import sys
+from os.path import exists
 
 
 def run_command(lies_path, k_hop, ns='SANS'):
@@ -19,12 +20,13 @@ def main():
     for rate in rpns_rates:
         for i in range(20):
             for k in range(2, 8):
-                try:
-                    run_command(f'{base_path}/mat_false_{rate}_{i}', k, ns)
-                    with open(results_path, 'a', encoding='utf-8') as f:
-                        f.write(f'Above results are from rules {rate}-{i}, k={k}\n')
-                except:
-                    pass
+                if exists(f'{base_path}/mat_false_{rate}_{i}'):
+                    try:
+                        run_command(f'{base_path}/mat_false_{rate}_{i}', k, ns)
+                        with open(results_path, 'a', encoding='utf-8') as f:
+                            f.write(f'Above results are from rules {rate}-{i}, k={k}\n')
+                    except FileNotFoundError:
+                        print(f'Rules {rate} {i} not found')
 
 
 if __name__ == '__main__':
