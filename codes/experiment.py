@@ -39,9 +39,9 @@ def main(skip_to_rpns=None, skip_to_id=None):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        start_rpns_rate = sys.argv[1]
-        start_rpns_id = sys.argv[2]
+    if len(sys.argv) > 2:
+        start_rpns_rate = sys.argv[2]
+        start_rpns_id = sys.argv[3]
         main(start_rpns_rate, start_rpns_id)
     else:
         main()
