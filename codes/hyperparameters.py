@@ -22,6 +22,7 @@ def obj_sansol(trial: optuna.trial.Trial):
     rpns_rate = int(chosen_path.split('_')[2])
     rpns_id = int(chosen_path.split('_')[3])
     print(chosen_path)
+    print(valid_paths)
     # rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
     # rpns_id = trial.suggest_categorical('rpns_id', [0, 1, 2, 3, 4])
 
