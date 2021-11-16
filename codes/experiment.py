@@ -7,7 +7,7 @@ from os.path import exists
 
 def run_command(lies_path, k_hop, ns):
     command = f"""python -u codes/run.py --cuda --do_train --do_valid --data_path data/converted --model TransE -n """\
-        f"""256 -b 1024 -d 1000 -g 24.0 -a 1.0 -lr 0.05 --max_steps 2656 -save models/{lies_path.split('/')[-1]}""" \
+        f"""256 -b 1024 -d 1000 -g 24.0 -a 1.0 -lr 0.05 --max_steps 2656 -save models/{lies_path.split('/')[-1]} """ \
         f"""--test_batch_size 16 -khop {k_hop} --log_steps 100000 -ns {ns} --lies {lies_path} -save_results 1 --results /var/scratch/yan370/SANSOL/results.txt"""
     cmd = subprocess.run(command, shell=True)
 
