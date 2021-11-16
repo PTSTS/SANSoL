@@ -435,6 +435,8 @@ def main(args):
                 save_results(args.negative_sample_method, rpns_rate, rpns_id, metric_key, value, args.max_steps)
 
         if args.temp_results:
+            print('Saved to', args.temp_results)
+            print(os.path.dirname(os.path.abspath(__file__)))
             pickle.dump(valid_metrics, open(args.temp_results, 'wb+'))
 
         yield valid_metrics
