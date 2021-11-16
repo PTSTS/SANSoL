@@ -42,5 +42,6 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         start_rpns_rate = sys.argv[1]
         start_rpns_id = sys.argv[2]
-
-    main()
+        main(start_rpns_rate, start_rpns_id)
+    else:
+        main()
