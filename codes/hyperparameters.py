@@ -13,6 +13,13 @@ def obj_sansol(trial: optuna.trial.Trial):
     lr = trial.suggest_float('lr', 0.0001, 0.1)
     nss = trial.suggest_int('nss', 4, 256)
     b = trial.suggest_int('b', 16, 2048)
+
+    valid_paths = []
+    for filename in os.listdir('/var/scratch/yan370/VLog'):
+        if 'mat_false' in filename:
+            valid_paths.append(os.path.join('/var/scratch/yan370/VLog', filename))
+    chosen_path
+
     rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
     rpns_id = trial.suggest_categorical('rpns_id', [0, 1, 2, 3, 4])
 
