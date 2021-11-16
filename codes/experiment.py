@@ -29,13 +29,13 @@ def main(skip_to_rpns=None, skip_to_id=None):
             if exists(f'{base_path}/mat_false_{rate}_{i}/train.txt'):
                 print(f'{rate} {i} '
                       f'______________________________________________________________________________________')
-                for k in range(2, 8):
-                    try:
-                        run_command(f'{base_path}/mat_false_{rate}_{i}', k, ns)
-                        with open(results_path, 'a', encoding='utf-8') as f:
-                            f.write(f'Above results are from rules {rate}-{i}, k={k}\n')
-                    except FileNotFoundError:
-                        print(f'Rules {rate} {i} not found')
+                # for k in range(2, 8):
+                try:
+                    run_command(f'{base_path}/mat_false_{rate}_{i}', 3, ns)
+                    with open(results_path, 'a', encoding='utf-8') as f:
+                        f.write(f'Above results are from rules {rate}-{i}, k={3}\n')
+                except FileNotFoundError:
+                    print(f'Rules {rate} {i} not found')
 
 
 if __name__ == '__main__':
