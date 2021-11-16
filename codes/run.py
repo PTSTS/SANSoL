@@ -429,9 +429,12 @@ def main(args):
 
         if args.save_results == 1:
             for metric_key, value in valid_metrics.items():
-
-                rpns_rate = args.lies.split('/')[-1].split('_')[-2]
-                rpns_id = args.lies.split('/')[-1].split('_')[-1]
+                if args.negative_sample_method == 'SANS':
+                    rpns_rate = 0
+                    rpns_id = 0
+                else:
+                    rpns_rate = args.lies.split('/')[-1].split('_')[-2]
+                    rpns_id = args.lies.split('/')[-1].split('_')[-1]
                 save_results(args.negative_sample_method, rpns_rate, rpns_id, metric_key, value, args.max_steps)
 
         if args.temp_results:
