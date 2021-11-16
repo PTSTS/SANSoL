@@ -17,11 +17,13 @@ def obj_sansol(trial: optuna.trial.Trial):
     valid_paths = []
     for filename in os.listdir('/var/scratch/yan370/VLog'):
         if 'mat_false' in filename:
-            valid_paths.append(os.path.join('/var/scratch/yan370/VLog', filename))
+            valid_paths.append(os.path.join(filename))
     chosen_path = valid_paths[trial.suggest_categorical('rules', range(len(valid_paths)))]
-
-    rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
-    rpns_id = trial.suggest_categorical('rpns_id', [0, 1, 2, 3, 4])
+    rpns_rate = int(chosen_path.split('_')[2])
+    rpns_id = int(chosen_path.split('_')[3])
+    print(chosen_path)
+    # rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
+    # rpns_id = trial.suggest_categorical('rpns_id', [0, 1, 2, 3, 4])
 
     base_path = '/var/scratch/yan370/VLog'
     lies_path = f'{base_path}/mat_false_{rpns_rate}_{rpns_id}'
