@@ -38,7 +38,7 @@ def obj_sansol(trial: optuna.trial.Trial):
     out, err = cmd.communicate()
     results = pickle.load(open(temp_results_path, 'rb'))
     os.remove(temp_results_path)
-    return results['MRR']
+    return -results['MRR']
 
 
 def obj_sans(trial: optuna.trial.Trial):
@@ -59,7 +59,7 @@ def obj_sans(trial: optuna.trial.Trial):
     out, err = cmd.communicate()
     results = pickle.load(open(temp_results_path, 'rb'))
     os.remove(temp_results_path)
-    return results['MRR']
+    return -results['MRR']
 
 
 def obj_sansolf(trial: optuna.trial.Trial):
@@ -94,7 +94,7 @@ def obj_sansolf(trial: optuna.trial.Trial):
     out, err = cmd.communicate()
     results = pickle.load(open(temp_results_path, 'rb'))
     os.remove(temp_results_path)
-    return results['MRR']
+    return -results['MRR']
 
 
 
