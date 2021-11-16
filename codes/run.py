@@ -463,7 +463,9 @@ def main(args):
 
 
 
-if __name__ == '__main__':
+if __name__ == '__main__'
+    import sys
+    print(sys.argv)
     args = parse_args()
     for metric in main(args):
         pass
