@@ -23,8 +23,8 @@ def main(skip_to_rpns=None, skip_to_id=None):
             if skip_to_rpns is not None:
                 if int(skip_to_rpns) > rate:
                     continue
-            if int(skip_to_id) is not None:
-                if skip_to_id > i:
+            if skip_to_id is not None:
+                if int(skip_to_id) > i:
                     continue
             if exists(f'{base_path}/mat_false_{rate}_{i}/train.txt'):
                 print(f'{rate} {i} '
