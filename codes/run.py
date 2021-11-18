@@ -123,6 +123,9 @@ def save_results(method, rpns, id, metric, value, steps, base_path=f'/var/scratc
     except FileNotFoundError:
         results = {}
     assert type(results) is dict
+    if args.negative_n_random_walks > 0:
+        method = 'RW' + method
+    method += str(args.negative_k_hop_sampling)
     if method not in results.keys():
         results[method] = {}
     if rpns not in results[method].keys():

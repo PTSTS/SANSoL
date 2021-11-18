@@ -12,7 +12,7 @@ def run_command(lies_path, k_hop, ns):
     cmd = subprocess.run(command, shell=True)
 
 
-def main(skip_to_rpns=None, skip_to_id=None):
+def main(skip_to_rpns=None, skip_to_id=None, k_hop=3):
     ns = sys.argv[1]
     base_path = '/var/scratch/yan370/VLog'
     rpns_rates = [5, 10, 15, 20, 25, 32, 40, 50, 60, 70, 80, 90, 100]
@@ -31,7 +31,7 @@ def main(skip_to_rpns=None, skip_to_id=None):
                       f'______________________________________________________________________________________')
                 # for k in range(2, 8):
                 try:
-                    run_command(f'{base_path}/mat_false_{rate}_{i}', 3, ns)
+                    run_command(f'{base_path}/mat_false_{rate}_{i}', k_hop, ns)
                     with open(results_path, 'a', encoding='utf-8') as f:
                         f.write(f'Above results are from rules {rate}-{i}, k={3}\n')
                 except FileNotFoundError:
@@ -42,6 +42,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 2:
         start_rpns_rate = sys.argv[2]
         start_rpns_id = sys.argv[3]
-        main(start_rpns_rate, start_rpns_id)
+        k = int(sys.argv[4])
+        main(start_rpns_rate, start_rpns_id, k)
     else:
         main()

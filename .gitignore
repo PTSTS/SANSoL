@@ -14,3 +14,5 @@ models
 
 !**/PLACEHOLDER
 *.npz
+/results/
+/rules/
