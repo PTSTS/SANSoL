@@ -236,10 +236,12 @@ class TrainDataset(Dataset):
             if self.method == 'uniform':
                 negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
             elif self.method == 'pseudo':
+                start = time.time()
                 if self.mode == 'head-batch':
                     negative_sample = np.random.choice(list(self.pseudo_head[relation]), size=self.negative_sample_size * 2)
                 if self.mode == 'tail-batch':
                     negative_sample = np.random.choice(list(self.pseudo_tail[relation]), size=self.negative_sample_size * 2)
+                print('Choice time', time.time() - start)
             else:
                 if self.k_neighbors is not None and k_hop_flag:
                     if self.method == 'SANS':
