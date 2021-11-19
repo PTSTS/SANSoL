@@ -225,9 +225,9 @@ class TrainDataset(Dataset):
                 negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
             elif self.method == 'pseudo':
                 if self.mode == 'head-batch':
-                    negative_sample_list.append(np.random.choice(self.pseudo_head[relation]))
+                    negative_sample_list.append(np.random.choice(list(self.pseudo_head[relation])))
                 if self.mode == 'tail-batch':
-                    negative_sample_list.append(np.random.choice(self.pseudo_tail[relation]))
+                    negative_sample_list.append(np.random.choice(list(self.pseudo_tail[relation])))
             else:
                 if self.k_neighbors is not None and k_hop_flag:
                     if self.method == 'SANS':
