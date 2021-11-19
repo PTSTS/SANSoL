@@ -4,6 +4,7 @@ import logging
 import os
 import random
 import pickle
+import time
 
 import numpy as np
 import torch
@@ -381,6 +382,7 @@ def main(args):
 
         # Training Loop
         for step in range(init_step, args.max_steps):
+            start = time.time()
 
             log = kge_model.train_step(kge_model, optimizer, train_iterator, args)
 
@@ -414,6 +416,7 @@ def main(args):
                 logging.info('Evaluating on Valid Dataset...')
                 metrics = kge_model.test_step(kge_model, valid_triples, all_true_triples, args)
                 log_metrics('Valid', step, metrics)
+            print(time.time() - start)
 
         save_variable_list = {
             'step': step,
