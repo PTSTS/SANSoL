@@ -403,6 +403,7 @@ class BidirectionalOneShotIterator(object):
         self.step = 0
 
     def __next__(self):
+        print(self.step)
         self.step += 1
         if self.step % 2 == 0:
             data = next(self.iterator_head)
