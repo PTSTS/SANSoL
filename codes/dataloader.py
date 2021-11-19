@@ -220,7 +220,6 @@ class TrainDataset(Dataset):
         return self.len
 
     def __getitem__(self, idx):
-        start = time.time()
         positive_sample = self.triples[idx]
 
         head, relation, tail = positive_sample
@@ -299,7 +298,6 @@ class TrainDataset(Dataset):
         negative_sample = torch.from_numpy(negative_sample)
 
         positive_sample = torch.LongTensor(positive_sample)
-        print(time.time() - start)
         return positive_sample, negative_sample, subsampling_weight, self.mode
 
     @staticmethod
