@@ -187,6 +187,18 @@ class TrainDataset(Dataset):
                     self.pseudo_tail[r] = set()
                 self.pseudo_tail[r].add(t)
                 self.pseudo_head[r].add(h)
+        elif method == 'pseudo-lies':
+            self.pseudo_head = {}
+            self.pseudo_tail = {}
+            for triple in lies_triples:
+                h, r, t = triple
+                if r not in self.pseudo_head.keys():
+                    self.pseudo_head[r] = set()
+                if r not in self.pseudo_tail.keys():
+                    self.pseudo_tail[r] = set()
+                self.pseudo_tail[r].add(t)
+                self.pseudo_head[r].add(h)
+
 
         elif method != 'uniform':
             if n_rw == 0:
@@ -208,6 +220,7 @@ class TrainDataset(Dataset):
         return self.len
 
     def __getitem__(self, idx):
+        start = time.time()
         positive_sample = self.triples[idx]
 
         head, relation, tail = positive_sample
@@ -286,7 +299,7 @@ class TrainDataset(Dataset):
         negative_sample = torch.from_numpy(negative_sample)
 
         positive_sample = torch.LongTensor(positive_sample)
-
+        print(time.time() - start)
         return positive_sample, negative_sample, subsampling_weight, self.mode
 
     @staticmethod
