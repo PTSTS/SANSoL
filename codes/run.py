@@ -385,7 +385,6 @@ def main(args):
             start = time.time()
 
             log = kge_model.train_step(kge_model, optimizer, train_iterator, args)
-            print(time.time() - start)
 
             training_logs.append(log)
 
@@ -405,6 +404,7 @@ def main(args):
                     'warm_up_steps': warm_up_steps
                 }
                 save_model(kge_model, optimizer, save_variable_list, args)
+            print(time.time() - start)
 
             if step % args.log_steps == 0:
                 metrics = {}
