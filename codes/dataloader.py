@@ -171,10 +171,24 @@ class TrainDataset(Dataset):
         self.true_head, self.true_tail = self.get_true_head_and_tail(self.triples)
         self.dsn = dsn.split('/')[1]  # dataset name
         self.method = method
+        self.pseudo_head = None
+        self.pseudo_tail = None
         if lies_triples is not None:
             self.lies_triples = lies_triples
             self.lies_triples_set = set(lies_triples)
-        if method != 'uniform':
+        if method == 'pseudo':
+            self.pseudo_head = {}
+            self.pseudo_tail = {}
+            for triple in triples:
+                h, r, t = triple
+                if r not in self.pseudo_head.keys():
+                    self.pseudo_head[r] = set()
+                if r not in self.pseudo_tail.keys():
+                    self.pseudo_tail[r] = set()
+                self.pseudo_tail[r].add(t)
+                self.pseudo_head[r].add(h)
+
+        elif method != 'uniform':
             if n_rw == 0:
                 self.k_neighbors = self.build_k_hop(k_hop, dataset_name=self.dsn)
                 if self.method != 'SANS':
@@ -187,6 +201,7 @@ class TrainDataset(Dataset):
                     self.lies_k_neighbors = self.build_lies_k_rw(n_rw=n_rw, k_hop=k_hop, dataset_name=self.dsn)
                 else:
                     self.lies_k_neighbors = None
+
         print(self.method)
 
     def __len__(self):
@@ -208,6 +223,11 @@ class TrainDataset(Dataset):
         while negative_sample_size < self.negative_sample_size:
             if self.method == 'uniform':
                 negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
+            elif self.method == 'pseudo':
+                if self.mode == 'head-batch':
+                    negative_sample_list.append(np.random.choice(self.pseudo_head[relation]))
+                if self.mode == 'tail-batch':
+                    negative_sample_list.append(np.random.choice(self.pseudo_tail[relation]))
             else:
                 if self.k_neighbors is not None and k_hop_flag:
                     if self.method == 'SANS':
