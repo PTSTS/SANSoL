@@ -229,6 +229,7 @@ class TrainDataset(Dataset):
 
         negative_sample_list = []
         negative_sample_size = 0
+        previous_negative_sample_size = 0
 
         k_hop_flag = True
         lies_k_hop_flag = True
@@ -237,14 +238,12 @@ class TrainDataset(Dataset):
                 negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
             elif self.method == 'pseudo':
                 if self.mode == 'head-batch':
-                    if len(self.pseudo_head[relation]) == 0 or \
-                            len(self.pseudo_head[relation]) == 1 and list(self.pseudo_head[relation])[0] == head:
+                    if not k_hop_flag:
                         negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
                     else:
                         negative_sample = np.random.choice(list(self.pseudo_head[relation]), size=self.negative_sample_size * 2)
                 if self.mode == 'tail-batch':
-                    if len(self.pseudo_tail[relation]) == 0 or len(self.pseudo_tail[relation]) == 1 and \
-                            list(self.pseudo_tail[relation])[0] == head:
+                    if not k_hop_flag:
                         negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
                     else:
                         negative_sample = np.random.choice(list(self.pseudo_tail[relation]), size=self.negative_sample_size * 2)
