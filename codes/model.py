@@ -348,7 +348,10 @@ class KGEModel(nn.Module):
 
         optimizer.zero_grad()
 
+        import time
+        start = time.time()
         positive_sample, negative_sample, subsampling_weight, mode = next(train_iterator)
+        print('Sample time', time.time() - start)
 
         if args.cuda:
             positive_sample = positive_sample.cuda()
