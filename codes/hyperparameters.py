@@ -170,3 +170,5 @@ if __name__ == '__main__':
         study.optimize(obj_sansolf, n_trials=n)
     elif ns == 'pseudo':
         study.optimize(obj_pseudo, n_trials=n)
+    elif ns == 'pseudo-lies':
+        study.optimize(obj_pseudo_lies, n_trials=n)
