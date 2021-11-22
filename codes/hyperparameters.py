@@ -116,7 +116,7 @@ def obj_pseudo(trial: optuna.trial.Trial):
     temp_results_path = f'{key}.pkl'
     command = f"""python -u codes/run.py --cuda --do_train --do_valid --data_path data/converted --model TransE -n """\
         f"""{nss} -b {b} -d 1000 -g 24.0 -a 1.0 -lr {lr} --max_steps 2656 -save models/pseudo{key}""" \
-        f""" --test_batch_size 16 -khop {0} --log_steps 100000 -ns pseudo --save_results 0 """\
+        f""" --test_batch_size 16 -khop {0} --log_steps 100000 -ns pseudo -save_results 0 """\
         f"""--temp_results {temp_results_path}"""
     cmd = subprocess.Popen(command, shell=True)
     out, err = cmd.communicate()
