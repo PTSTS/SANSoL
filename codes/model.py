@@ -349,7 +349,6 @@ class KGEModel(nn.Module):
         optimizer.zero_grad()
 
         positive_sample, negative_sample, subsampling_weight, mode = next(train_iterator)
-        print('sampled')
 
         if args.cuda:
             positive_sample = positive_sample.cuda()
@@ -390,7 +389,6 @@ class KGEModel(nn.Module):
             regularization_log = {}
 
         loss.backward()
-        print('backward loss')
 
         optimizer.step()
 

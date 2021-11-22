@@ -382,11 +382,9 @@ def main(args):
         training_logs = []
 
         # Training Loop
-        for step in tqdm.tqdm(range(init_step, args.max_steps)):
-            start = time.time()
+        for step in range(init_step, args.max_steps):
 
             log = kge_model.train_step(kge_model, optimizer, train_iterator, args)
-            print('finish train step')
 
             training_logs.append(log)
 
@@ -406,7 +404,6 @@ def main(args):
                     'warm_up_steps': warm_up_steps
                 }
                 save_model(kge_model, optimizer, save_variable_list, args)
-            print(time.time() - start)
 
             if step % args.log_steps == 0:
                 metrics = {}
