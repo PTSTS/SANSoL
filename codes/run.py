@@ -13,6 +13,7 @@ from torch.utils.data import DataLoader
 from model import KGEModel
 from dataloader import TrainDataset
 from dataloader import BidirectionalOneShotIterator
+import tqdm
 
 
 def parse_args(args=None):
@@ -381,7 +382,7 @@ def main(args):
         training_logs = []
 
         # Training Loop
-        for step in range(init_step, args.max_steps):
+        for step in tqdm.tqdm(range(init_step, args.max_steps)):
             start = time.time()
 
             log = kge_model.train_step(kge_model, optimizer, train_iterator, args)
