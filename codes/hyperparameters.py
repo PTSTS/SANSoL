@@ -125,6 +125,39 @@ def obj_pseudo(trial: optuna.trial.Trial):
     return -results['MRR']
 
 
+def obj_pseudo_lies(trial: optuna.trial.Trial):
+    key = random.randint(0, 999999)
+
+    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    nss = trial.suggest_int('nss', 4, 256)
+    b = trial.suggest_int('b', 16, 2048)
+
+    valid_paths = []
+    for filename in os.listdir('/var/scratch/yan370/VLog'):
+        if 'mat_false' in filename:
+            valid_paths.append(os.path.join(filename))
+    # chosen_path = valid_paths[trial.suggest_categorical('rules', range(len(valid_paths)))]
+    rpns_rate = 20
+    rpns_id = 7
+    # print(chosen_path)
+    # print(valid_paths)
+    # rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
+    # rpns_id = trial.suggest_categorical('rpns_id', [0, 1, 2, 3, 4])
+
+    base_path = '/var/scratch/yan370/VLog'
+    lies_path = f'{base_path}/mat_false_{rpns_rate}_{rpns_id}'
+    temp_results_path = f'{key}.pkl'
+    command = f"""python -u codes/run.py --cuda --do_train --do_valid --data_path data/converted --model TransE -n """\
+        f"""{nss} -b {b} -d 1000 -g 24.0 -a 1.0 -lr {lr} --max_steps 2656 -save models/pseudo-lies{key}""" \
+        f""" --test_batch_size 16 -khop {0} --log_steps 100000 -ns pseudo -save_results 0  --lies {lies_path} """\
+        f"""--temp_results {temp_results_path}"""
+    cmd = subprocess.Popen(command, shell=True)
+    out, err = cmd.communicate()
+    results = pickle.load(open(temp_results_path, 'rb'))
+    os.remove(temp_results_path)
+    return -results['MRR']
+
+
 if __name__ == '__main__':
     study = optuna.create_study()
     n = 1000
