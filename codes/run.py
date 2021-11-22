@@ -383,12 +383,8 @@ def main(args):
 
         # Training Loop
         for step in range(init_step, args.max_steps):
-            start = time.time()
 
             log = kge_model.train_step(kge_model, optimizer, train_iterator, args)
-            if ns == 'pseudo':
-                print('Train step time', time.time() - start)
-
             training_logs.append(log)
 
             if step >= warm_up_steps:
