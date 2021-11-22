@@ -237,9 +237,17 @@ class TrainDataset(Dataset):
                 negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
             elif self.method == 'pseudo':
                 if self.mode == 'head-batch':
-                    negative_sample = np.random.choice(list(self.pseudo_head[relation]), size=self.negative_sample_size * 2)
+                    if len(self.pseudo_head[relation]) == 0 or \
+                            len(self.pseudo_head[relation]) == 1 and list(self.pseudo_head[relation])[0] == head:
+                        negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
+                    else:
+                        negative_sample = np.random.choice(list(self.pseudo_head[relation]), size=self.negative_sample_size * 2)
                 if self.mode == 'tail-batch':
-                    negative_sample = np.random.choice(list(self.pseudo_tail[relation]), size=self.negative_sample_size * 2)
+                    if len(self.pseudo_tail[relation]) == 0 or len(self.pseudo_tail[relation]) == 1 and \
+                            list(self.pseudo_tail[relation])[0] == head:
+                        negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
+                    else:
+                        negative_sample = np.random.choice(list(self.pseudo_tail[relation]), size=self.negative_sample_size * 2)
             else:
                 if self.k_neighbors is not None and k_hop_flag:
                     if self.method == 'SANS':
