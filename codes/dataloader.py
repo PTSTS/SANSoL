@@ -236,7 +236,7 @@ class TrainDataset(Dataset):
         while negative_sample_size < self.negative_sample_size:
             if self.method == 'uniform':
                 negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
-            elif self.method == 'pseudo':
+            elif self.method == 'pseudo' or self.method == 'pseudo-lies':
                 if self.mode == 'head-batch':
                     if not k_hop_flag:
                         negative_sample = np.random.randint(self.nentity, size=self.negative_sample_size * 2)
