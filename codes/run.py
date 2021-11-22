@@ -386,6 +386,7 @@ def main(args):
             start = time.time()
 
             log = kge_model.train_step(kge_model, optimizer, train_iterator, args)
+            print('finish train step')
 
             training_logs.append(log)
 
