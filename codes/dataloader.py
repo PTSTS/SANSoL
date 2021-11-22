@@ -190,6 +190,7 @@ class TrainDataset(Dataset):
         elif method == 'pseudo-lies':
             self.pseudo_head = {}
             self.pseudo_tail = {}
+            assert lies_triples is not None
             for triple in lies_triples:
                 h, r, t = triple
                 if r not in self.pseudo_head.keys():
