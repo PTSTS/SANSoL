@@ -19,8 +19,8 @@ def obj_sansol(trial: optuna.trial.Trial):
     #     if 'mat_false' in filename:
     #         valid_paths.append(os.path.join(filename))
     # chosen_path = valid_paths[trial.suggest_categorical('rules', range(len(valid_paths)))]
-    rpns_rate = 20
-    rpns_id = 7
+    rpns_rate = int(sys.argv[2])
+    rpns_id = int(sys.argv[3])
     # rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
     # rpns_id = trial.suggest_categorical('rpns_id', [0, 1, 2, 3, 4])
 
@@ -71,8 +71,8 @@ def obj_sansolf(trial: optuna.trial.Trial):
         if 'mat_false' in filename:
             valid_paths.append(os.path.join(filename))
     # chosen_path = valid_paths[trial.suggest_categorical('rules', range(len(valid_paths)))]
-    rpns_rate = 20
-    rpns_id = 7
+    rpns_rate = int(sys.argv[2])
+    rpns_id = int(sys.argv[3])
     # print(chosen_path)
     # print(valid_paths)
     # rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
@@ -137,8 +137,8 @@ def obj_pseudo_lies(trial: optuna.trial.Trial):
         if 'mat_false' in filename:
             valid_paths.append(os.path.join(filename))
     # chosen_path = valid_paths[trial.suggest_categorical('rules', range(len(valid_paths)))]
-    rpns_rate = 20
-    rpns_id = 7
+    rpns_rate = int(sys.argv[2])
+    rpns_id = int(sys.argv[3])
     # print(chosen_path)
     # print(valid_paths)
     # rpns_rate = [5, 10, 15, 20, 25, 40][trial.suggest_int('rpns_rate', 0, 5)]
