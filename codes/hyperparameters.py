@@ -11,7 +11,8 @@ def obj_sansol(trial: optuna.trial.Trial):
 
     k_hop = trial.suggest_int('k', 2, 8)
     lr = trial.suggest_float('lr', 0.0001, 0.1)
-    nss = trial.suggest_int('nss', 4, 256)
+    gamma = trial.suggest_int('gamma', 0, 50)
+    nss = 256
     b = trial.suggest_int('b', 16, 2048)
 
     # valid_paths = []
@@ -28,7 +29,7 @@ def obj_sansol(trial: optuna.trial.Trial):
     lies_path = f'{base_path}/mat_false_{rpns_rate}_{rpns_id}'
     temp_results_path = f'{key}.pkl'
     command = f"""python -u codes/run.py --cuda --do_train --do_valid --data_path data/converted --model TransE -n """\
-        f"""{nss} -b {b} -d 1000 -g 24.0 -a 1.0 -lr {lr} --max_steps 2656 -save models/SANSOL{lies_path.split('/')[-1]} """ \
+        f"""{nss} -b {b} -d 1000 -g {gamma} -a 1.0 -lr {lr} --max_steps 2656 -save models/SANSOL{lies_path.split('/')[-1]} """ \
         f"""--test_batch_size 16 -khop {k_hop} --log_steps 100000 -ns SANSOL --lies {lies_path} """\
         f"""--temp_results {temp_results_path}"""
     cmd = subprocess.Popen(command, shell=True)
