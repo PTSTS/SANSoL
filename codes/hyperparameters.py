@@ -42,7 +42,7 @@ def obj_sansol(trial: optuna.trial.Trial):
 def obj_sans(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
     k_hop = trial.suggest_int('k', 2, 8)
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -1, -8)
     nss = trial.suggest_int('nss', 4, 256)
     gamma = trial.suggest_int('gamma', 0, 50)
     b = trial.suggest_int('b', 16, 2048)
