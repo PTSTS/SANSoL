@@ -10,7 +10,7 @@ def obj_sansol(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
 
     k_hop = trial.suggest_int('k', 2, 8)
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     gamma = trial.suggest_int('gamma', 0, 50)
     nss = 256
     b = trial.suggest_int('b', 16, 2048)
@@ -64,7 +64,7 @@ def obj_sansolf(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
 
     k_hop = trial.suggest_int('k', 2, 8)
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     nss = trial.suggest_int('nss', 4, 256)
     b = trial.suggest_int('b', 16, 2048)
 
@@ -98,7 +98,7 @@ def obj_rw_sans(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
     k_hop = trial.suggest_int('k', 2, 8)
     rw = trial.suggest_int('rw', 5, 200)
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     nss = 256
     b = trial.suggest_int('b', 16, 2048)
 
@@ -120,7 +120,7 @@ def obj_rw_sansol(trial: optuna.trial.Trial):
 
     k_hop = trial.suggest_int('k', 2, 8)
     rw = trial.suggest_int('rw', 5, 200)
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     gamma = trial.suggest_int('gamma', 0, 50)
     nss = 256
     b = trial.suggest_int('b', 16, 2048)
@@ -146,7 +146,7 @@ def obj_rw_sansolf(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
 
     k_hop = trial.suggest_int('k', 2, 8)
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     nss = 256
     rw = trial.suggest_int('rw', 5, 200)
 
@@ -181,7 +181,7 @@ def obj_rw_sansolf(trial: optuna.trial.Trial):
 def obj_pseudo(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
 
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     nss = trial.suggest_int('nss', 4, 256)
     b = trial.suggest_int('b', 16, 2048)
 
@@ -214,7 +214,7 @@ def obj_pseudo(trial: optuna.trial.Trial):
 def obj_pseudo_lies(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
 
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     nss = trial.suggest_int('nss', 4, 256)
     b = trial.suggest_int('b', 16, 2048)
 
@@ -247,7 +247,7 @@ def obj_pseudo_lies(trial: optuna.trial.Trial):
 def obj_uniform(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
 
-    lr = trial.suggest_float('lr', 0.0001, 0.1)
+    lr = 10 ** trial.suggest_float('log_lr', -8, -1)
     nss = trial.suggest_int('nss', 4, 256)
     b = trial.suggest_int('b', 16, 2048)
 

@@ -14,6 +14,8 @@ from model import KGEModel
 from dataloader import TrainDataset
 from dataloader import BidirectionalOneShotIterator
 import tqdm
+import cProfile
+import pstats
 
 
 def parse_args(args=None):
@@ -484,6 +486,12 @@ def main(args):
 if __name__ == '__main__':
     import sys
     print(sys.argv)
+    pr = cProfile.Profile()
+    pr.enable()
     args = parse_args()
     for metric in main(args):
         pass
+
+    pr.disable()
+    stats = pstats.Stats(pr)
+    stats.dump_stats('/var/scratch/yan370/runs/' + 'stats_' + '_'.join(list(sys.argv[1:])) + '.pstats')

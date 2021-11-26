@@ -3,6 +3,7 @@ import subprocess
 import pickle
 import sys
 from os.path import exists
+import cProfile
 
 
 def run_command(lies_path, k_hop, ns):
