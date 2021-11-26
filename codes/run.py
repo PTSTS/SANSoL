@@ -67,6 +67,7 @@ def parse_args(args=None):
     parser.add_argument('--results', type=str, default='')
     parser.add_argument('-save_results', type=int, default=1)
     parser.add_argument('--temp_results', type=str, default='')
+    parser.add_argument('--remove_self_loops', type=int, default=1)
 
     return parser.parse_args(args)
 
@@ -140,7 +141,7 @@ def save_results(method, rpns, id, metric, value, steps, base_path=f'/var/scratc
     pickle.dump(results, open(base_path + file_name, 'wb+'))
 
 
-def read_triple(file_path, entity2id, relation2id):
+def read_triple(file_path, entity2id, relation2id, remove_self_loops=False):
     '''
     Read triples and map them into ids.
     '''
@@ -148,7 +149,13 @@ def read_triple(file_path, entity2id, relation2id):
     with open(file_path) as fin:
         for line in fin:
             h, r, t = line.strip().split('\t')
-            triples.append((entity2id[h], relation2id[r], entity2id[t]))
+            if remove_self_loops:
+                if h == t:
+                    continue
+                else:
+                    triples.append((entity2id[h], relation2id[r], entity2id[t]))
+            else:
+                triples.append((entity2id[h], relation2id[r], entity2id[t]))
     return triples
 
 
@@ -232,15 +239,19 @@ def main(args):
     logging.info('#entity: %d' % nentity)
     logging.info('#relation: %d' % nrelation)
 
-    train_triples = read_triple(os.path.join(args.data_path, 'train.txt'), entity2id, relation2id)
+    train_triples = read_triple(os.path.join(args.data_path, 'train.txt'), entity2id, relation2id,
+                                bool(args.remove_self_loops))
     logging.info('#train: %d' % len(train_triples))
-    valid_triples = read_triple(os.path.join(args.data_path, 'valid.txt'), entity2id, relation2id)
+    valid_triples = read_triple(os.path.join(args.data_path, 'valid.txt'), entity2id, relation2id,
+                                bool(args.remove_self_loops))
     logging.info('#valid: %d' % len(valid_triples))
-    test_triples = read_triple(os.path.join(args.data_path, 'test.txt'), entity2id, relation2id)
+    test_triples = read_triple(os.path.join(args.data_path, 'test.txt'), entity2id, relation2id,
+                               bool(args.remove_self_loops))
     logging.info('#test: %d' % len(test_triples))
 
     if ns != 'SANS' and ns != 'uniform' and ns != 'pseudo':
-        lies_triples = read_triple(os.path.join(args.lies, 'train.txt'), entity2id, relation2id)
+        lies_triples = read_triple(os.path.join(args.lies, 'train.txt'), entity2id, relation2id,
+                                   bool(args.remove_self_loops))
         logging.info('#lies train: %d' % len(lies_triples))
     # All true triples
     all_true_triples = train_triples + valid_triples + test_triples
