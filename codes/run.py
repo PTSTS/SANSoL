@@ -495,5 +495,6 @@ if __name__ == '__main__':
     pr.disable()
     stats = pstats.Stats(pr)
     stats.dump_stats(
-        '/var/scratch/yan370/runs/' + 'stats_' + args.negative_sample_method, str(random.randint(0, 999999)) + '.pstats'
+        '/var/scratch/yan370/runs/' + 'stats_' + args.negative_sample_method + str(random.randint(0, 999999)) +
+        '.pstats'
     )
