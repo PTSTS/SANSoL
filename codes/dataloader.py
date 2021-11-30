@@ -199,6 +199,14 @@ class TrainDataset(Dataset):
                     self.pseudo_tail[r] = set()
                 self.pseudo_tail[r].add(t)
                 self.pseudo_head[r].add(h)
+            for triple in triples:
+                h, r, t = triple
+                if r not in self.pseudo_head.keys():
+                    self.pseudo_head[r] = set()
+                if r not in self.pseudo_tail.keys():
+                    self.pseudo_tail[r] = set()
+                self.pseudo_tail[r].add(t)
+                self.pseudo_head[r].add(h)
 
 
         elif method != 'uniform':
