@@ -215,8 +215,9 @@ def obj_pseudo_lies(trial: optuna.trial.Trial):
     key = random.randint(0, 999999)
 
     lr = 10 ** trial.suggest_float('log_lr', -8, -1)
-    nss = trial.suggest_int('nss', 4, 256)
-    b = trial.suggest_int('b', 16, 2048)
+    warmup = trial.suggest_int('nss', 1, 2655)
+    # nss = trial.suggest_int('nss', 4, 256)
+    # b = trial.suggest_int('b', 16, 2048)
 
     valid_paths = []
     for filename in os.listdir('/var/scratch/yan370/VLog'):
@@ -234,9 +235,9 @@ def obj_pseudo_lies(trial: optuna.trial.Trial):
     lies_path = f'{base_path}/mat_false_{rpns_rate}_{rpns_id}'
     temp_results_path = f'{key}.pkl'
     command = f"""python -u codes/run.py --cuda --do_train --do_valid --data_path data/converted --model TransE -n """\
-        f"""{nss} -b {b} -d 1000 -g 24.0 -a 1.0 -lr {lr} --max_steps 2656 -save models/pseudo-lies{key}""" \
+        f"""{256} -b {1024} -d 1000 -g 24.0 -a 1.0 -lr {lr} --max_steps 2656 -save models/pseudo-lies{key}""" \
         f""" --test_batch_size 16 -khop {0} --log_steps 100000 -ns pseudo-lies -save_results 0  --lies {lies_path} """\
-        f"""--temp_results {temp_results_path}"""
+        f"""--temp_results {temp_results_path} --warm_up_steps {warmup}"""
     cmd = subprocess.Popen(command, shell=True)
     out, err = cmd.communicate()
     results = pickle.load(open(temp_results_path, 'rb'))
