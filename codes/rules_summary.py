@@ -3,7 +3,7 @@ import os
 import pickle
 
 rules_path = '../rules'
-results_path = '../results/results_2656.pkl'
+results_path = '../../results/results_2656.pkl'
 
 rules_dict_sansol = {}
 rules_dict_sansolf = {}
@@ -81,7 +81,7 @@ rpns_list = [str(x) for x in [5, 10, 15, 20, 25, 32, 40, 50, 60, 70, 80, 90, 100
 rpns_ids = [str(x) for x in range(20)]
 result_list = [[None for x in range(len(rpns_list))] for y in range(len(rpns_ids))]
 
-for k0, v0 in results['SANSOLF5'].items():
+for k0, v0 in results['SANSOLF7'].items():
     for k1, v1 in v0.items():
         result_list[rpns_ids.index(k1)][rpns_list.index(k0)] = v1['MRR']
 

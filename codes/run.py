@@ -291,6 +291,7 @@ def main(args):
                 batch_size=args.batch_size,
                 shuffle=True,
                 num_workers=max(1, args.cpu_num//2),
+                # num_workers=0,
                 collate_fn=TrainDataset.collate_fn
             )
 
@@ -307,6 +308,7 @@ def main(args):
                 batch_size=args.batch_size,
                 shuffle=True,
                 num_workers=max(1, args.cpu_num//2),
+                # num_workers=0,
                 collate_fn=TrainDataset.collate_fn
             )
         else:
@@ -325,6 +327,8 @@ def main(args):
                 batch_size=args.batch_size,
                 shuffle=True,
                 num_workers=max(1, args.cpu_num//2),
+
+                # num_workers=0,
                 collate_fn=TrainDataset.collate_fn
             )
 
@@ -342,7 +346,8 @@ def main(args):
                 batch_size=args.batch_size,
                 shuffle=True,
                 num_workers=max(1, args.cpu_num//2),
-                collate_fn=TrainDataset.collate_fn
+                collate_fn=TrainDataset.collate_fn,
+                # num_workers = 0,
             )
 
 

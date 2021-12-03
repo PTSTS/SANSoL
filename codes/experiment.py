@@ -16,11 +16,11 @@ def run_command(lies_path, k_hop, ns):
 def main(skip_to_rpns=None, skip_to_id=None, k_hop=3):
     ns = sys.argv[1]
     base_path = '/var/scratch/yan370/VLog'
-    rpns_rates = [5, 10, 15, 20, 25, 32, 40, 50, 60, 70, 80, 90, 100]
+    rpns_rates = [32, 40, 50, 60, 70, 80, 90, 100]
 
     results_path = '/var/scratch/yan370/SANSOL/results.txt'
     for rate in rpns_rates:
-        for i in range(20):
+        for i in range(5):
             if skip_to_rpns is not None:
                 if int(skip_to_rpns) > rate:
                     continue
