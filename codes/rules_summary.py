@@ -78,14 +78,23 @@ for key in keys:
 # print(rules_count_sansolf)
 
 rpns_list = [str(x) for x in [5, 10, 15, 20, 25, 32, 40, 50, 60, 70, 80, 90, 100]]
-rpns_ids = [str(x) for x in range(20)]
+rpns_ids = [str(x) for x in range(5)]
 result_list = [[None for x in range(len(rpns_list))] for y in range(len(rpns_ids))]
 
-for k0, v0 in results['SANSOLF7'].items():
+for k0, v0 in results['RWSANSOL2'].items():
     for k1, v1 in v0.items():
-        result_list[rpns_ids.index(k1)][rpns_list.index(k0)] = v1['MRR']
+        if k1 in rpns_ids and k0 in rpns_list:
+            result_list[rpns_ids.index(k1)][rpns_list.index(k0)] = v1['MRR']
+        elif str(k1) in rpns_ids and str(k0) in rpns_list:
+            result_list[rpns_ids.index(str(k1))][rpns_list.index(str(k0))] = v1['MRR']
+        elif str(k1) in rpns_ids and k0 in rpns_list:
+            result_list[rpns_ids.index(str(k1))][rpns_list.index(k0)] = v1['MRR']
+        elif k1 in rpns_ids and str(k0) in rpns_list:
+            result_list[rpns_ids.index(k1)][rpns_list.index(str(k0))] = v1['MRR']
+        else:
+            result_list[0][0] = v1['MRR']
 
-print(results['SANS'])
+# print(results['SANS2'])
 # print(result_list)
 for row in result_list:
     for item in row:
