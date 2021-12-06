@@ -18,6 +18,7 @@ def run_command(lies_path, k_hop, ns, rw=False):
             f"""--test_batch_size 16 -khop {k_hop} --log_steps 100000 -ns {ns} --lies {lies_path} -save_results 1"""\
             """ --results /var/scratch/yan370/SANSOL/results.txt -nrw 100"""
 
+    print(command)
     cmd = subprocess.run(command, shell=True)
 
 
