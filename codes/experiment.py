@@ -60,8 +60,10 @@ if __name__ == '__main__':
         rw = False
         if len(sys.argv) > 5:
             corr = bool(sys.argv[5])
+            print(corr)
         if len(sys.argv) > 6:
             rw = bool(sys.argv[6])
+            print(rw)
 
         main(start_rpns_rate, start_rpns_id, k, corr, rw)
     else:
