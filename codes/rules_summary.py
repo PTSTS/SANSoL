@@ -81,7 +81,7 @@ rpns_list = [str(x) for x in [5, 10, 15, 20, 25, 32, 40, 50, 60, 70, 80, 90, 100
 rpns_ids = [str(x) for x in range(5)]
 result_list = [[None for x in range(len(rpns_list))] for y in range(len(rpns_ids))]
 
-for k0, v0 in results['RWSANSOL2'].items():
+for k0, v0 in results['SANSOLFcorr4'].items():
     for k1, v1 in v0.items():
         if k1 in rpns_ids and k0 in rpns_list:
             result_list[rpns_ids.index(k1)][rpns_list.index(k0)] = v1['MRR']

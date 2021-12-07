@@ -144,6 +144,9 @@ def save_results(method, rpns, id, metric, value, steps, base_path=f'/var/scratc
     results[method][rpns][id][metric] = value
     pickle.dump(results, open(base_path + file_name, 'wb+'))
 
+    with open('/var/scratch/yan370/SANSOL/RPNS.csv', 'a') as f:
+        f.write('\t'.join([method, rpns, id, value]))
+
 
 def read_triple(file_path, entity2id, relation2id, remove_self_loops=False):
     '''
