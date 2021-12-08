@@ -462,7 +462,7 @@ def main(args):
                 else:
                     rpns_rate = args.lies.split('/')[-1].split('_')[-2]
                     rpns_id = args.lies.split('/')[-1].split('_')[-1]
-                save_results(args.negative_sample_method, rpns_rate, rpns_id, metric_key, value, args.max_steps)
+                save_results(args.negative_sample_method, rpns_rate, rpns_id, 'MRR', value, args.max_steps)
 
         if args.temp_results:
             print('Saved to', args.temp_results)
