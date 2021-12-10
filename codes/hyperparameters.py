@@ -74,8 +74,10 @@ def obj_sansolf(trial: optuna.trial.Trial):
 
     k_hop = trial.suggest_int('k', 2, 8)
     lr = 10 ** trial.suggest_float('log_lr', -8, -1)
-    nss = trial.suggest_int('nss', 4, 256)
-    b = trial.suggest_int('b', 16, 2048)
+    gamma = 24
+
+    nss = 256
+    b = 1024
 
     valid_paths = []
     for filename in os.listdir('/var/scratch/yan370/VLog'):
@@ -94,7 +96,7 @@ def obj_sansolf(trial: optuna.trial.Trial):
     temp_results_path = f'{key}.pkl'
     command = f"""python -u codes/run.py --cuda --do_train --do_valid --data_path data/converted --model TransE -n """\
         f"""{nss} -b {b} -d 1000 -g 24.0 -a 1.0 -lr {lr} --max_steps 2656 -save models/SANSOLF{lies_path.split('/')[-1]} """ \
-        f"""--test_batch_size 16 -khop {k_hop} --log_steps 100000 -ns SANSOLF --lies {lies_path} """\
+        f"""--test_batch_size 16 -khop {k_hop} --log_steps 100000 -ns SANSOLF --lies {lies_path}  --warm_up_steps 0 """\
         f"""--temp_results {temp_results_path}"""
     cmd = subprocess.Popen(command, shell=True)
     out, err = cmd.communicate()
