@@ -400,7 +400,7 @@ def main(args):
     # Set valid dataloader as it would be evaluated during training
 
     if args.do_train:
-        logging.info('learning_rate = %d' % current_learning_rate)
+        logging.info(f'learning_rate = {current_learning_rate}')
 
         training_logs = []
 

@@ -1,5 +1,5 @@
-key = 'SANSOLF4'
-mode = 'rpns-ave'
+key = 'RWSANSOL5'
+mode = 'rpns-k'
 
 rpns_rates = [5, 10, 15, 20, 25, 32, 40, 50, 60, 70, 80, 90, 100]
 methods = ['SANSOL', 'SANSOLF', 'SANSOLcorr', 'SANSOLFcorr', 'RWSANSOL', 'RWSANSOLF', 'RWSANSOLcorr', 'RWSANSOLFcorr']
